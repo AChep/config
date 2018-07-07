@@ -106,7 +106,7 @@ abstract class Config<K, T> {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T: Any> configDelegate(key: K, defaultValue: T) = when (defaultValue) {
+    fun <T : Any> configDelegate(key: K, defaultValue: T) = when (defaultValue) {
         is Int -> ConfigIntDelegate(key, defaultValue)
         is Long -> ConfigLongDelegate(key, defaultValue)
         is Boolean -> ConfigBooleanDelegate(key, defaultValue)
@@ -143,11 +143,7 @@ abstract class Config<K, T> {
                 // Editor is guaranteed to be not null because
                 // we are editing right now.
                 putToStore(editor!!, key, cur)
-            } else edit {
-                // I hope people will still use the edit block for
-                // more than one change.
-                setValue(thisRef, property, value)
-            }
+            } else throw IllegalStateException("You can not edit properties outside of the edit block!")
         }
 
         override fun getValue(thisRef: Any?, property: KProperty<*>): T = cur
