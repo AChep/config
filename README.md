@@ -3,6 +3,45 @@
 
 Utility library for Android with Kotlin to help you to create and manage simple settings of application. 
 
+
+How to use
+----------------
+Firstly, create your configuration class based on `Config`, for example:
+``` kotlin
+object Cfg : SharedPrefConfig("cfg") {  
+    const val KEY_INT = "my_int_key"  
+    const val KEY_STRING = "my_string_key"  
+  
+    var intProperty by configDelegate(KEY_INT, 0)
+      
+    var stringProperty by configDelegate(KEY_STRING, "")  
+}
+```
+Then, init it on application create:
+``` kotlin
+class App : Application() {  
+    override fun onCreate() {  
+        super.onCreate()  
+        Cfg.init(this)  
+    }  
+}
+```
+That's all!  
+
+#### Read value
+``` kotlin
+val value = Cfg.intProperty + 1
+```
+
+#### Write value
+``` kotlin
+Cfg.editWithConfig(context) { 
+    intProperty = 100
+    stringProperty = ""
+}
+```
+
+
 Report a bug or request a feature
 ----------------
 Before creating a new issue please make sure that same or similar issue is not already created by checking [open issues][2] and [closed issues][3] *(please note that there might be multiple pages)*. If your issue is already there, don't create a new one, but leave a comment under already existing one.
