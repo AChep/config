@@ -9,7 +9,7 @@ import com.artemchep.config.extensions.asStore
 /**
  * @author Artem Chepurnoy
  */
-class SharedPrefConfig(private val sharedPrefName: String) : Config<String, Context>() {
+open class SharedPrefConfig(private val sharedPrefName: String) : Config<String, Context>() {
 
     /**
      * Initializes the config with values loaded
