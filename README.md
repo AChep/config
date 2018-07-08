@@ -48,6 +48,9 @@ Cfg.edit(context) {
 }
 ```
 
+#### Sample project
+You may want to check a [sample project][4] for a working example.
+
 
 Report a bug or request a feature
 ----------------
@@ -85,3 +88,4 @@ $ cd config/
 [1]: https://github.com/AChep/config/issues/new
 [2]: https://github.com/AChep/config/issues?state=open
 [3]: https://github.com/AChep/config/issues?state=closed
+[4]: https://github.com/AChep/config/tree/master/sample
