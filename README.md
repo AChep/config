@@ -40,6 +40,13 @@ Cfg.editWithConfig(context) {
     stringProperty = ""
 }
 ```
+or
+``` kotlin
+Cfg.edit(context) { 
+    Cfg.intProperty = 100
+    Cfg.stringProperty = ""
+}
+```
 
 
 Report a bug or request a feature
