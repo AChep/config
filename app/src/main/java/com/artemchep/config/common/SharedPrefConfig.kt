@@ -2,14 +2,13 @@ package com.artemchep.config.common
 
 import android.content.Context
 import com.artemchep.config.Config
-import com.artemchep.config.editor.Editor
 import com.artemchep.config.editor.common.SharedPrefEditor
 import com.artemchep.config.extensions.asStore
 
 /**
  * @author Artem Chepurnoy
  */
-open class SharedPrefConfig(private val sharedPrefName: String) : Config<String, Context>() {
+open class SharedPrefConfig(private val sharedPrefName: String) : Config<String>() {
 
     /**
      * Initializes the config with values loaded
@@ -20,6 +19,9 @@ open class SharedPrefConfig(private val sharedPrefName: String) : Config<String,
         init(store)
     }
 
-    override fun createEditor(): Editor<String> = SharedPrefEditor(helper!!, sharedPrefName)
+    fun edit(context: Context, block: () -> Unit) {
+        val editor = SharedPrefEditor(context, sharedPrefName)
+        performEdit(editor, block)
+    }
 
 }

@@ -9,7 +9,7 @@ import kotlin.reflect.KProperty
 /**
  * @author Artem Chepurnoy
  */
-abstract class Config<K, T> {
+abstract class Config<K> {
 
     private val properties: MutableList<ConfigDelegate<*>> = ArrayList()
 
@@ -21,9 +21,6 @@ abstract class Config<K, T> {
         private set
 
     protected var editor: Editor<K>? = null
-        private set
-
-    protected var helper: T? = null
         private set
 
     /** Set of current changes in the config */
@@ -48,22 +45,19 @@ abstract class Config<K, T> {
         properties.forEach { it.putToStore(storeWrite, it.key) }
     }
 
-    fun edit(helper: T? = null, block: () -> Unit) {
+    protected fun performEdit(editor: Editor<K>, block: () -> Unit) {
         synchronized(this) {
             val keys: Set<K>
             try {
                 this.isEditing = true
-                this.helper = helper
-                // Create editor and do the
-                // changes.
-                createEditor().let {
+                // Do the changes.
+                editor.let {
                     this.editor = it
                     block.invoke()
                     it.apply()
                 }
             } finally {
                 this.isEditing = false
-                this.helper = null
                 this.editor = null
 
                 // Copy the changes map
@@ -80,8 +74,6 @@ abstract class Config<K, T> {
             }
         }
     }
-
-    protected abstract fun createEditor(): Editor<K>
 
     /**
      * Adds the listener to the list of active listeners;
@@ -111,6 +103,7 @@ abstract class Config<K, T> {
         is Long -> ConfigLongDelegate(key, defaultValue)
         is Boolean -> ConfigBooleanDelegate(key, defaultValue)
         is String -> ConfigStringDelegate(key, defaultValue)
+        is Record<*> -> ConfigRecordDelegate(key, defaultValue as Record<K>)
         else -> throw IllegalArgumentException()
     }.also { properties += it } as ConfigDelegate<T>
 
@@ -217,6 +210,21 @@ abstract class Config<K, T> {
     /**
      * @author Artem Chepurnoy
      */
+    inner class ConfigRecordDelegate internal constructor(key: K, cur: Record<K>) : ConfigDelegate<Record<K>>(key, cur) {
+
+        override fun putToStore(storeWrite: StoreWrite<K>, key: K, value: Record<K>) {
+            value.putToStore(storeWrite, key)
+        }
+
+        override fun getFromStore(storeRead: StoreRead<K>, key: K, value: Record<K>): Record<K> {
+            return value.apply { getFromStore(storeRead, key) }
+        }
+
+    }
+
+    /**
+     * @author Artem Chepurnoy
+     */
     interface OnConfigChangedListener<K> {
         fun onConfigChanged(keys: Set<K>)
     }
@@ -225,7 +233,7 @@ abstract class Config<K, T> {
      * @author Artem Chepurnoy
      */
     class Registration<K>(
-            private val config: Config<K, *>,
+            private val config: Config<K>,
             private val listener: OnConfigChangedListener<K>
     ) {
 
@@ -242,6 +250,17 @@ abstract class Config<K, T> {
                 config.removeListener(listener)
             }
         }
+
+    }
+
+    /**
+     * @author Artem Chepurnoy
+     */
+    interface Record<K> {
+
+        fun putToStore(storeWrite: StoreWrite<K>, key: K)
+
+        fun getFromStore(storeRead: StoreRead<K>, key: K)
 
     }
 

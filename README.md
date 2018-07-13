@@ -35,13 +35,6 @@ val value = Cfg.intProperty + 1
 
 #### Write value
 ``` kotlin
-Cfg.editWithConfig(context) { 
-    intProperty = 100
-    stringProperty = ""
-}
-```
-or
-``` kotlin
 Cfg.edit(context) { 
     Cfg.intProperty = 100
     Cfg.stringProperty = ""

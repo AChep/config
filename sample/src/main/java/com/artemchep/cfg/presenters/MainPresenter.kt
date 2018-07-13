@@ -2,10 +2,10 @@ package com.artemchep.cfg.presenters
 
 import android.content.Context
 import com.artemchep.config.Config
-import com.artemchep.config.extensions.editWithConfig
 import com.artemchep.cfg.Cfg
 import com.artemchep.cfg.contracts.IMainPresenter
 import com.artemchep.cfg.contracts.IMainViewApi
+import com.artemchep.cfg.models.Note
 import kotlin.properties.ReadOnlyProperty
 
 /**
@@ -29,8 +29,11 @@ class MainPresenter(
 
     override fun onPause() {
         Cfg.removeListener(this)
-        Cfg.editWithConfig(context) {
-            this.note = this@MainPresenter.note
+        Cfg.edit(context) {
+            Cfg.note = Note().apply {
+                timestamp = System.currentTimeMillis()
+                text = note
+            }
         }
         super.onPause()
     }
@@ -46,13 +49,13 @@ class MainPresenter(
 
     private fun updateReadOnly() = view?.setReadOnly(Cfg.isReadOnly)
 
-    private fun updateNote() = view?.setNote(Cfg.note)
+    private fun updateNote() = view?.setNote(Cfg.note.text)
 
     override fun setReadOnly(isReadOnly: Boolean) {
         // Update the config immediately; this will call the
         // `onConfigChanged` callback!
-        Cfg.editWithConfig(context) {
-            this.isReadOnly = isReadOnly
+        Cfg.edit(context) {
+            Cfg.isReadOnly = isReadOnly
         }
     }
 

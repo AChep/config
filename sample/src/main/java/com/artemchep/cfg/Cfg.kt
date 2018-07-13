@@ -1,5 +1,6 @@
 package com.artemchep.cfg
 
+import com.artemchep.cfg.models.Note
 import com.artemchep.config.common.SharedPrefConfig
 
 /**
@@ -8,7 +9,7 @@ import com.artemchep.config.common.SharedPrefConfig
 object Cfg : SharedPrefConfig("cfg") {
 
     const val KEY_READ_ONLY = "ro"
-    const val KEY_NOTE = "note"
+    const val KEY_NOTE = "note2"
 
     /**
      * A switch indication if the note field should or should not
@@ -21,6 +22,6 @@ object Cfg : SharedPrefConfig("cfg") {
      */
     // Please don't use the Config as an actual note database,
     // it is not!
-    var note by configDelegate(KEY_NOTE, "")
+    var note by configDelegate(KEY_NOTE, Note())
 
 }
