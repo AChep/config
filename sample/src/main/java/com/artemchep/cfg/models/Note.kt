@@ -7,23 +7,27 @@ import com.artemchep.config.store.StoreWrite
 /**
  * @author Artem Chepurnoy
  */
-class Note : Config.Record<String> {
-
-    var text: String = ""
-
+data class Note(
+    var text: String = "",
     var timestamp: Long = 0L
+) : Config.Record<String> {
+
+    companion object {
+        fun formatTextKey(key: String) = "$key::text"
+        fun formatTimestampKey(key: String) = "$key::timestamp"
+    }
 
     override fun putToStore(storeWrite: StoreWrite<String>, key: String) {
         storeWrite.apply {
-            putString(key, text)
-            putLong(key, timestamp)
+            putString(formatTextKey(key), text)
+            putLong(formatTimestampKey(key), timestamp)
         }
     }
 
     override fun getFromStore(storeRead: StoreRead<String>, key: String) {
         storeRead.apply {
-            text = getString(key, text)
-            timestamp = getLong(key, timestamp)
+            text = getString(formatTextKey(key), text)
+            timestamp = getLong(formatTimestampKey(key), timestamp)
         }
     }
 
