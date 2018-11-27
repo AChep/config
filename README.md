@@ -59,6 +59,10 @@ Cfg.observe(observer)
 #### Sample project
 You may want to check a [sample project][4] for a working example.
 
+Restrictions
+----------------
+1. Property can not be `null`-able.
+⋅⋅⋅_Use empty String for this_ 
 
 Report a bug or request a feature
 ----------------
