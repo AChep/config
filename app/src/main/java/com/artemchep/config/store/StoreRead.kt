@@ -2,7 +2,7 @@ package com.artemchep.config.store
 
 /**
  * @author Artem Chepurnoy
- * @see Store
+ * @see StoreReadWrite
  * @see StoreWrite
  */
 interface StoreRead<K> {

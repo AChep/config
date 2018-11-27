@@ -1,6 +1,8 @@
 package com.artemchep.config
 
 import com.artemchep.config.editor.Editor
+import com.artemchep.config.observable.Observable
+import com.artemchep.config.observable.ObservableRegistration
 import com.artemchep.config.store.StoreRead
 import com.artemchep.config.store.StoreWrite
 import kotlin.properties.ReadWriteProperty
@@ -9,7 +11,8 @@ import kotlin.reflect.KProperty
 /**
  * @author Artem Chepurnoy
  */
-abstract class Config<K, T> {
+abstract class Config<K, T> :
+    Observable<Config.OnConfigChangedListener<K>> {
 
     private val properties: MutableList<ConfigDelegate<*>> = ArrayList()
 
@@ -83,30 +86,21 @@ abstract class Config<K, T> {
 
     protected abstract fun createEditor(): Editor<K>
 
-    /**
-     * Adds the listener to the list of active listeners;
-     * dont forget to remove it later.
-     * @see removeListener
-     */
-    fun addListener(listener: OnConfigChangedListener<K>): Registration<K> {
+    override fun observe(observer: OnConfigChangedListener<K>): Registration<K> {
         synchronized(listeners) {
-            listeners += listener
-            return Registration(this, listener)
+            listeners += observer
+            return Registration(this, observer)
         }
     }
 
-    /**
-     * Removes the listener from the list of active listeners.
-     * @see addListener
-     */
-    fun removeListener(listener: OnConfigChangedListener<K>) {
+    override fun removeObserver(observer: OnConfigChangedListener<K>) {
         synchronized(listeners) {
-            listeners -= listener
+            listeners -= observer
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T: Any> configDelegate(key: K, defaultValue: T) = when (defaultValue) {
+    fun <T : Any> configDelegate(key: K, defaultValue: T) = when (defaultValue) {
         is Int -> ConfigIntDelegate(key, defaultValue)
         is Long -> ConfigLongDelegate(key, defaultValue)
         is Boolean -> ConfigBooleanDelegate(key, defaultValue)
@@ -118,9 +112,9 @@ abstract class Config<K, T> {
      * @author Artem Chepurnoy
      */
     abstract inner class ConfigDelegate<T : Any>(
-            internal var key: K,
-            @Volatile
-            private var cur: T
+        internal var key: K,
+        @Volatile
+        private var cur: T
     ) : ReadWriteProperty<Any?, T> {
 
         /**
@@ -161,7 +155,8 @@ abstract class Config<K, T> {
     /**
      * @author Artem Chepurnoy
      */
-    inner class ConfigIntDelegate internal constructor(key: K, cur: Int) : ConfigDelegate<Int>(key, cur) {
+    inner class ConfigIntDelegate internal constructor(key: K, cur: Int) :
+        ConfigDelegate<Int>(key, cur) {
 
         override fun putToStore(storeWrite: StoreWrite<K>, key: K, value: Int) {
             storeWrite.putInt(key, value)
@@ -176,7 +171,8 @@ abstract class Config<K, T> {
     /**
      * @author Artem Chepurnoy
      */
-    inner class ConfigLongDelegate internal constructor(key: K, cur: Long) : ConfigDelegate<Long>(key, cur) {
+    inner class ConfigLongDelegate internal constructor(key: K, cur: Long) :
+        ConfigDelegate<Long>(key, cur) {
 
         override fun putToStore(storeWrite: StoreWrite<K>, key: K, value: Long) {
             storeWrite.putLong(key, value)
@@ -191,7 +187,8 @@ abstract class Config<K, T> {
     /**
      * @author Artem Chepurnoy
      */
-    inner class ConfigBooleanDelegate internal constructor(key: K, cur: Boolean) : ConfigDelegate<Boolean>(key, cur) {
+    inner class ConfigBooleanDelegate internal constructor(key: K, cur: Boolean) :
+        ConfigDelegate<Boolean>(key, cur) {
 
         override fun putToStore(storeWrite: StoreWrite<K>, key: K, value: Boolean) {
             storeWrite.putBoolean(key, value)
@@ -206,7 +203,8 @@ abstract class Config<K, T> {
     /**
      * @author Artem Chepurnoy
      */
-    inner class ConfigStringDelegate internal constructor(key: K, cur: String) : ConfigDelegate<String>(key, cur) {
+    inner class ConfigStringDelegate internal constructor(key: K, cur: String) :
+        ConfigDelegate<String>(key, cur) {
 
         override fun putToStore(storeWrite: StoreWrite<K>, key: K, value: String) {
             storeWrite.putString(key, value)
@@ -229,21 +227,18 @@ abstract class Config<K, T> {
      * @author Artem Chepurnoy
      */
     class Registration<K>(
-            private val config: Config<K, *>,
-            private val listener: OnConfigChangedListener<K>
-    ) {
+        private val config: Config<K, *>,
+        private val listener: OnConfigChangedListener<K>
+    ): ObservableRegistration {
 
-        var isRegistered = true
-            private set
+        private var isRegistered = true
 
-        /**
-         * Removes the listener from the Config, does nothing if
-         * called second+ times.
-         */
-        fun unregister() {
+        override fun isRegistered(): Boolean = isRegistered
+
+        override fun unregister() {
             if (isRegistered) {
                 isRegistered = false
-                config.removeListener(listener)
+                config.removeObserver(listener)
             }
         }
 

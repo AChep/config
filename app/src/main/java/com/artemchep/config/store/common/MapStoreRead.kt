@@ -5,7 +5,7 @@ import com.artemchep.config.store.StoreRead
 /**
  * @author Artem Chepurnoy
  */
-class MapStoreRead<K>(private val map: Map<K, *>) : StoreRead<K> {
+open class MapStoreRead<K>(private val map: Map<K, *>) : StoreRead<K> {
 
     override fun getBoolean(key: K, defaultValue: Boolean) = map.getOrDefaultTs(key, defaultValue)
 

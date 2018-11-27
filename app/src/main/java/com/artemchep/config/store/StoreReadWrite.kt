@@ -5,4 +5,4 @@ package com.artemchep.config.store
  * @see StoreRead
  * @see StoreWrite
  */
-interface Store<K> : StoreRead<K>, StoreWrite<K>
+interface StoreReadWrite<K> : StoreRead<K>, StoreWrite<K>

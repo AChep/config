@@ -1,7 +1,6 @@
 package com.artemchep.config.editor.common
 
 import com.artemchep.config.editor.Editor
-import com.artemchep.config.store.common.MapStore
 
 /**
  * Editor that does nothing.
