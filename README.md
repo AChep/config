@@ -41,6 +41,21 @@ Cfg.edit(context) {
 }
 ```
 
+#### Observe changes
+``` kotlin
+val observer = object : Config.OnConfigChangedListener<String> {
+    override fun onConfigChanged(keys: Set<String>) {
+        // Check if the keys include your 
+        // key and update something.
+    }
+}
+
+Cfg.observe(observer)
+// Do not forget to unregister it later on
+// by calling:
+// Cfg.removeObserver(observer)
+```
+
 #### Sample project
 You may want to check a [sample project][4] for a working example.
 
