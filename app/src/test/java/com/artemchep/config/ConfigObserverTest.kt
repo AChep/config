@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.doThrow
 import com.nhaarman.mockitokotlin2.whenever
 import org.amshove.kluent.mock
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -15,12 +16,20 @@ import org.junit.Test
  */
 class ConfigObserverTest {
 
+    private lateinit var config: TestEmptyConfig
+
+    @Before
+    fun initConfig() {
+        config = TestEmptyConfig()
+    }
+
     @Test(expected = Exception::class)
     fun testAddDuplicateObserver() {
         val observer = mock<Config.OnConfigChangedListener<String>>()
-        val config = TestEmptyConfig()
-        config.observe(observer)
-        config.observe(observer) // should crash
+        config.apply {
+            observe(observer)
+            observe(observer) // should crash
+        }
     }
 
     @Test
@@ -33,22 +42,24 @@ class ConfigObserverTest {
 
         }
 
-        val config = TestEmptyConfig()
-        config.observe(observer)
-        config.removeObserver(observer)
+        config.apply {
+            observe(observer)
+            removeObserver(observer)
 
-        config.edit {
-            config.intParameter = 1
-        } // should not emit the change to an observer
+            edit {
+                intParameter = 1
+            } // should not emit the change to an observer
+        }
     }
 
     @Test
     fun testRemoveDuplicateObserver() {
         val observer = mock<Config.OnConfigChangedListener<String>>()
-        val config = TestEmptyConfig()
-        config.observe(observer)
-        config.removeObserver(observer)
-        config.removeObserver(observer) // should be fine
+        config.apply {
+            observe(observer)
+            removeObserver(observer)
+            removeObserver(observer) // should be fine
+        }
     }
 
     @Test
@@ -57,15 +68,16 @@ class ConfigObserverTest {
         val observer = object : Config.OnConfigChangedListener<String> {
 
             override fun onConfigChanged(keys: Set<String>) {
-                Assert.assertTrue(keys == expected)
+                Assert.assertEquals(keys, expected)
             }
 
         }
 
-        val config = TestEmptyConfig()
-        config.observe(observer)
-        config.edit {
-            config.intParameter = 1
+        config.apply {
+            observe(observer)
+            edit {
+                intParameter = 1
+            }
         }
     }
 
@@ -75,16 +87,17 @@ class ConfigObserverTest {
         val observer = object : Config.OnConfigChangedListener<String> {
 
             override fun onConfigChanged(keys: Set<String>) {
-                Assert.assertTrue(keys == expected)
+                Assert.assertEquals(keys, expected)
             }
 
         }
 
-        val config = TestEmptyConfig()
-        config.observe(observer)
-        config.edit {
-            config.intParameter = 1
-            config.stringParameter = "1"
+        config.apply {
+            observe(observer)
+            edit {
+                intParameter = 1
+                stringParameter = "1"
+            }
         }
     }
 

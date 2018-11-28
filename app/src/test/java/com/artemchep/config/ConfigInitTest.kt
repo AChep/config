@@ -6,12 +6,20 @@ import com.artemchep.config.common.TestMapConfig
 import com.artemchep.config.extensions.asStore
 import com.artemchep.config.store.common.MapStoreReadWrite
 import org.junit.Assert
+import org.junit.Before
 import org.junit.Test
 
 /**
  * @author Artem Chepurnoy
  */
 class ConfigInitTest {
+
+    private lateinit var config: TestMapConfig
+
+    @Before
+    fun initConfig() {
+        config = TestMapConfig()
+    }
 
     @Test
     fun testInit() {
@@ -20,7 +28,6 @@ class ConfigInitTest {
             KEY_STRING_PROP to "1"
         )
 
-        val config = TestMapConfig()
         config.init(src.asStore())
 
         Assert.assertEquals(src[KEY_INT_PROP], config.intParameter)
@@ -38,7 +45,6 @@ class ConfigInitTest {
             KEY_STRING_PROP to "2"
         )
 
-        val config = TestMapConfig()
         config.init(srcA.asStore())
         config.init(srcB.asStore())
 
@@ -52,7 +58,6 @@ class ConfigInitTest {
             KEY_INT_PROP to 1
         )
 
-        val config = TestMapConfig()
         val stringPrev = config.stringParameter
         config.init(src.asStore())
 
