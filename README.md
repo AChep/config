@@ -1,5 +1,5 @@
 # config
-[![Download](https://api.bintray.com/packages/achep/maven/config/images/download.svg)](https://bintray.com/achep/maven/config/_latestVersion) [![Build Status](https://travis-ci.org/AChep/config.svg?branch=master)](https://travis-ci.org/AChep/config)
+[![Download](https://api.bintray.com/packages/achep/maven/config/images/download.svg)](https://bintray.com/achep/maven/config/_latestVersion) [![Build Status](https://travis-ci.org/AChep/config.svg?branch=master)](https://travis-ci.org/AChep/config) [![Code Climate](https://codeclimate.com/github/AChep/config/badges/gpa.svg)](https://codeclimate.com/github/AChep/config)
 
 Utility library for Android with Kotlin to help you to create and manage simple settings of application. 
 
