@@ -9,7 +9,7 @@ plugins {
     kotlin("android.extensions")
 }
 
-val appVersionName = "2.0.1"
+val appVersionName = "2.0.2"
 val appDependencies = createDependencies(Module.LIBRARY)
 
 configure<PublishExtension> {
@@ -33,7 +33,7 @@ android {
         minSdkVersion(Android.minSdkVersion)
         targetSdkVersion(Android.targetSdkVersion)
 
-        versionCode = 3
+        versionCode = 4
         versionName = appVersionName
 
         setProperty("archivesBaseName", "config")
