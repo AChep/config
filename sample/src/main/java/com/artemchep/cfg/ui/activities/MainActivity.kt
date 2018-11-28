@@ -1,10 +1,13 @@
 package com.artemchep.cfg.ui.activities
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.artemchep.cfg.Cfg
 import com.artemchep.cfg.R
 import com.artemchep.cfg.models.Note
+import com.artemchep.cfg.ui.dialogs.createDependenciesDialog
 import com.artemchep.config.Config
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -22,6 +25,19 @@ class MainActivity : AppCompatActivity(), Config.OnConfigChangedListener<String>
         roSwitch.setOnCheckedChangeListener { _, isChecked ->
             noteField.isEnabled = isChecked.not()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.aboutAction -> createDependenciesDialog(this).show()
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
     }
 
     override fun onStart() {

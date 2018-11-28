@@ -6,4 +6,6 @@
 
     <string name="hint">Your thoughts…</string>
 
+    <string name="deps">Dependencies</string>
+
 </resources>
