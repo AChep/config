@@ -3,6 +3,18 @@
 
 Utility library for Android with Kotlin to help you to create and manage simple settings of application. 
 
+Download
+----------------
+Gradle:
+```groovy
+repositories {
+  jcenter()
+}
+
+dependencies {
+  implementation 'com.artemchep.config:config:${latestVersion}'
+}
+```
 
 How to use
 ----------------
