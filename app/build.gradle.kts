@@ -41,13 +41,12 @@ android {
 
     buildTypes {
         maybeCreate("release").apply {
-            isMinifyEnabled = true
-            proguardFiles("proguard-rules.pro")
+            isMinifyEnabled = false
+            consumerProguardFiles("proguard-rules.pro")
         }
 
         maybeCreate("debug").apply {
             isMinifyEnabled = false
-            proguardFiles("proguard-rules.pro")
         }
 
         // Convert dependencies to java code, to
