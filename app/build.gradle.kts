@@ -10,6 +10,7 @@ plugins {
 }
 
 val appVersionName = "2.0.0"
+val appDependencies = createDependencies(Module.LIBRARY)
 
 configure<PublishExtension> {
     setLicences("Apache-2.0")
@@ -20,7 +21,8 @@ configure<PublishExtension> {
     groupId = "com.artemchep.config"
     artifactId = "config"
     publishVersion = appVersionName
-    desc = "Utility library for Android with Kotlin to help you to create and manage simple settings of application."
+    desc =
+            "Utility library for Android with Kotlin to help you to create and manage simple settings of application."
     website = "https://github.com/achep/config"
 }
 
@@ -36,7 +38,6 @@ android {
     }
 
     buildTypes {
-
         maybeCreate("release").apply {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
@@ -47,9 +48,15 @@ android {
             proguardFiles("proguard-rules.pro")
         }
 
+        // Convert dependencies to java code, to
+        // show them later in the app.
+        val (bcFieldType, bcFieldValue) = appDependencies.toJavaField()
+        forEach { buildType ->
+            buildType.buildConfigField(bcFieldType, "DEPENDENCIES", bcFieldValue)
+        }
     }
 }
 
 dependencies {
-    implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
+    handle(this, appDependencies)
 }

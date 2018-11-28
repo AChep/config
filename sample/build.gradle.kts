@@ -7,6 +7,7 @@ plugins {
 }
 
 val appVersionName = "1.0.0"
+val appDependencies = createDependencies(Module.SAMPLE)
 
 android {
     compileSdkVersion(Android.targetSdkVersion)
@@ -26,6 +27,13 @@ android {
             isMinifyEnabled = true
             proguardFiles("proguard-rules.pro")
         }
+
+        // Convert dependencies to java code, to
+        // show them later in the app.
+        val (bcFieldType, bcFieldValue) = appDependencies.toJavaField()
+        forEach { buildType ->
+            buildType.buildConfigField(bcFieldType, "DEPENDENCIES", bcFieldValue)
+        }
     }
 }
 
@@ -35,12 +43,6 @@ androidExtensions {
 
 dependencies {
     implementation(project(":app"))
-
-    implementation(kotlin("stdlib-jdk7", KotlinCompilerVersion.VERSION))
-
-    implementation("com.google.android.material:material:1.0.0")
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.core:core-ktx:1.0.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-alpha2")
+    handle(this, appDependencies)
 }
 
