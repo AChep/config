@@ -1,22 +1,29 @@
 language: android
 jdk: oraclejdk8
 before_cache:
-  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+- rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+- rm -fr $HOME/.gradle/caches/*/plugin-resolution/
 cache:
   directories:
-    - $HOME/.gradle/caches/
-    - $HOME/.gradle/wrapper/
-    - $HOME/.android/build-cache
+  - "$HOME/.gradle/caches/"
+  - "$HOME/.gradle/wrapper/"
+  - "$HOME/.android/build-cache"
 android:
   components:
-    - build-tools-28.0.3
-    - android-28
-    - add-on
-    - extra
-    - extra-google-m2repository
-    - extra-android-m2repository
+  - build-tools-28.0.3
+  - android-28
+  - add-on
+  - extra
+  - extra-google-m2repository
+  - extra-android-m2repository
 before_install:
-  - yes | sdkmanager "platforms;android-28"
+- yes | sdkmanager "platforms;android-28"
 script:
-  - "./gradlew build check test"
+- "./gradlew assembleRelease test"
+deploy:
+  provider: releases
+  api_key:
+    secure: Ekwz4dYDLcRuaapY88e1Q0fooxHwyEewUodfmSQgv0J4E/+tbWj4L9gWQeAWe8MihXp7FPctLGuE6WXRClmKXxYbs7xpEpycZlwYAMci+GCIguArYKSO1DkkURz0scTk7V4MpgkZcDoefunxjFoB4gVEyDqNLOjEDhVUKxCeBa5s4fBxDSvl8Z/e2qIoqMQHNUY3YvG4SgqEHUlwGfZey9+O8UyHHDO3PLMrVxUjZsB3Rm8oyJdGxd3pH5lKxoHI8RHdeQXg6j18Opp8wGwybG9RevM6jUMW4x29EjKTcKvra5wABek/x2lB5S9C3jnatnXFI0/gScl9SRxs48qyohIBmTKX8W2T9Bna2dBd6WJT7Yb1X7s406G5DpinCxuSHg6rvuwzajISKqgvuzxLwIps/rV4uZaEgFq1x0BEfqhUomQKvyIqsNSrVvLommzr0J4ob5js+jqALqwQDk+SltL7jddoaqixYDSqltKbNh7wpOeYLVh5tjGBVZNqcYs9KZ/WmrJ9VpNvqxaWj+pvxokEfbhcYObT3SZ6FEBnJXTF9mezi+avVLwSngwKPUWjCLnmXul+aIafh4tHBBJwJ9ZYN0qzKLNowwkHT3tDMI8NTk7ovKXGusAhKf1zTl6lFYtAFZWhp7Y/yJRtdOUeT0QttziCrcPkEao3TaK1vTg=
+  file: app/build/outputs/aar/config-release.aar
+  on:
+    repo: AChep/config

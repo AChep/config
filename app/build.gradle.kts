@@ -35,6 +35,8 @@ android {
 
         versionCode = 2
         versionName = appVersionName
+
+        setProperty("archivesBaseName", "config")
     }
 
     buildTypes {
