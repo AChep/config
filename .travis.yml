@@ -19,4 +19,4 @@ android:
 before_install:
   - yes | sdkmanager "platforms;android-28"
 script:
-  - "./gradlew build check"
+  - "./gradlew build check test"
