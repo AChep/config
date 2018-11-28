@@ -13,7 +13,7 @@ import kotlin.reflect.KProperty
  */
 abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
 
-    private val properties: MutableList<ConfigDelegate<*>> = ArrayList()
+    protected val properties: MutableList<ConfigDelegate<*>> = ArrayList()
 
     /**
      * `true` if the config is being edited,
@@ -82,6 +82,10 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
 
     override fun observe(observer: OnConfigChangedListener<K>): Registration<K> {
         synchronized(listeners) {
+            if (observer in listeners) {
+                throw IllegalArgumentException("You can not have duplicating observers.")
+            }
+
             listeners += observer
             return Registration(this, observer)
         }

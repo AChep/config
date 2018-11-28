@@ -5,6 +5,18 @@ fun createDependencies(module: Module): List<Dependency> {
         "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$KOTLIN_VERSION",
         DependencyType.IMPLEMENTATION
     )
+    val kotlinMockito = Dependency(
+        "Mockito-Kotlin",
+        KOTLIN_MOCKITO_VERSION,
+        "com.nhaarman.mockitokotlin2:mockito-kotlin:$KOTLIN_MOCKITO_VERSION",
+        DependencyType.TEST_IMPLEMENTATION
+    )
+    val junit = Dependency(
+        "JUnit",
+        JUNIT_VERSION,
+        "junit:junit:$JUNIT_VERSION",
+        DependencyType.TEST_IMPLEMENTATION
+    )
     val kluent = Dependency(
         "Kluent",
         KLUENT_VERSION,
@@ -41,6 +53,8 @@ fun createDependencies(module: Module): List<Dependency> {
     return when (module) {
         Module.LIBRARY -> listOf(
             kotlinStdlib,
+            kotlinMockito,
+            junit,
             kluent
         )
         Module.SAMPLE -> listOf(
