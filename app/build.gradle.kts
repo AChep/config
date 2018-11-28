@@ -12,6 +12,8 @@ plugins {
 val appVersionName = "2.0.0"
 
 configure<PublishExtension> {
+    setLicences("Apache-2.0")
+
     userOrg = "achep"
     repoName = "maven"
 
