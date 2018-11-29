@@ -28,9 +28,13 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
     /** Set of current changes in the config */
     private val changes: MutableSet<K> = HashSet()
 
-    /** List of current listeners of the config */
+    /** List of current oservers of the config */
     private val listeners: MutableList<OnConfigChangedListener<K>> = ArrayList()
 
+    /**
+     * Sets [properties] from a given [store][StoreRead]. If the preperty is not present
+     * in a store, its value will not be changed.
+     */
     fun init(storeRead: StoreRead<K>) {
         // Init each of the properties
         properties.forEach { property ->
@@ -80,6 +84,14 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
         }
     }
 
+    /**
+     * Adds the given observer to the observers list. This means that the given observer will
+     * receive all events and will never be automatically removed. You should manually call
+     * [removeObserver] to stop observing this Config.
+     *
+     * If the observer was already added with an owner to this Config,
+     * Config throws an IllegalArgumentException.
+     */
     override fun observe(observer: OnConfigChangedListener<K>): Registration<K> {
         synchronized(listeners) {
             if (observer in listeners) {
@@ -97,6 +109,10 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
         }
     }
 
+    /**
+     * Creates a delegate that can handle specific type and puts it in
+     * a [properties] array.
+     */
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> configDelegate(key: K, defaultValue: T) = when (defaultValue) {
         is Int -> ConfigIntDelegate(key, defaultValue)

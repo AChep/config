@@ -19,6 +19,10 @@ open class SharedPrefConfig(private val sharedPrefName: String) : Config<String>
         init(store)
     }
 
+    /**
+     * Enters the "edit" mode, in which you can actually change
+     * the values of a config.
+     */
     fun edit(context: Context, block: () -> Unit) {
         val editor = SharedPrefEditor(context, sharedPrefName)
         edit(editor, block)

@@ -5,6 +5,10 @@ package com.artemchep.config.observable
  */
 interface ObservableRegistration {
 
+    /**
+     * `true` if the observer is added to an observable,
+     * `false` otherwise.
+     */
     fun isRegistered(): Boolean
 
     /**
