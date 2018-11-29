@@ -112,6 +112,7 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
     /**
      * Creates a delegate that can handle specific type and puts it in
      * a [properties] array.
+     * @see removeConfigDelegate
      */
     @Suppress("UNCHECKED_CAST")
     fun <T : Any> configDelegate(key: K, defaultValue: T) = when (defaultValue) {
@@ -122,6 +123,15 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
         is Record<*> -> ConfigRecordDelegate(key, defaultValue as Record<K>)
         else -> throw IllegalArgumentException()
     }.also { properties += it } as ConfigDelegate<T>
+
+    /**
+     * Removes given config property from a [properties] list. This actually
+     * removes the property.
+     * @see configDelegate
+     */
+    fun removeConfigDelegate(delegate: ConfigDelegate<*>) {
+        properties -= delegate
+    }
 
     /**
      * @author Artem Chepurnoy
