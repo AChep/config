@@ -1,4 +1,5 @@
 # config
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/612ab41a8b9444cd96ddb0543df1415e)](https://app.codacy.com/app/AChep/config?utm_source=github.com&utm_medium=referral&utm_content=AChep/config&utm_campaign=Badge_Grade_Dashboard)
 [![Download](https://api.bintray.com/packages/achep/maven/config/images/download.svg)](https://bintray.com/achep/maven/config/_latestVersion) [![Build Status](https://travis-ci.org/AChep/config.svg?branch=master)](https://travis-ci.org/AChep/config) [![Code Climate](https://codeclimate.com/github/AChep/config/badges/gpa.svg)](https://codeclimate.com/github/AChep/config)
 
 Utility library for Android with Kotlin to help you to create and manage simple settings of application. 
