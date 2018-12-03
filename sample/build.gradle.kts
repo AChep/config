@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.config.KotlinCompilerVersion
+import kotlin.math.max
 
 plugins {
     id("com.android.application")
@@ -15,7 +16,7 @@ android {
     defaultConfig {
         applicationId = "com.artemchep.cfg"
 
-        minSdkVersion(Android.minSdkVersion)
+        minSdkVersion(max(Android.minSdkVersion, 23))
         targetSdkVersion(Android.targetSdkVersion)
 
         versionCode = 2
