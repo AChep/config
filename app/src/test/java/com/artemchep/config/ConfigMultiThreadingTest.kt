@@ -1,14 +1,15 @@
 package com.artemchep.config
 
 import com.artemchep.config.common.TestMapConfig
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
 import org.junit.Test
-import org.mockito.Mockito
 
 /**
  * @author Artem Chepurnoy
@@ -24,7 +25,7 @@ class ConfigMultiThreadingTest {
         val observer = mock<Config.OnConfigChangedListener<String>>()
         config.observe(observer)
 
-        val n = 10000
+        val n = 1000
 
         runBlocking {
             // Clone a data and iterate
@@ -32,6 +33,10 @@ class ConfigMultiThreadingTest {
             (0..n).forEach { index ->
                 launch(context) {
                     config.edit {
+                        // Just to increase the chances
+                        // of concurrency issues.
+                        Thread.sleep(10L)
+
                         config.intParameter = index
                     }
                 }
