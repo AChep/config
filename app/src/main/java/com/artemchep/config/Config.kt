@@ -76,8 +76,15 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
 
             // Notify every listener about
             // those changes.
-            if (keys.isNotEmpty()) synchronized(listeners) {
-                listeners.forEach {
+            if (keys.isNotEmpty()) {
+                // Copy global list of listeners to a local one, so
+                // we can modify it.
+                var observers: List<OnConfigChangedListener<K>>
+                synchronized(listeners) {
+                    observers = listeners.toList()
+                }
+
+                observers.forEach {
                     it.onConfigChanged(keys)
                 }
             }
