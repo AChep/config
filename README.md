@@ -62,10 +62,13 @@ val observer = object : Config.OnConfigChangedListener<String> {
     }
 }
 
-Cfg.observe(observer)
+val registration = Cfg.observe(observer)
 // Do not forget to unregister it later on
 // by calling:
 // Cfg.removeObserver(observer)
+//
+// or via the created Registration instance:
+// registration.unregister()
 ```
 
 #### Sample project
