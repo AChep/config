@@ -3,7 +3,7 @@ package com.artemchep.config.common
 /**
  * @author Artem Chepurnoy
  */
-class TestMapConfig(map: MutableMap<String, Any> = HashMap()) : MapConfig<String>(map) {
+class TestMapConfig(map: MutableMap<String, Any> = HashMap()) : MapStringConfig(map) {
 
     var intParameter by configDelegate(KEY_INT_PROP, VALUE_INT_PROP)
 

@@ -4,11 +4,14 @@ import android.content.Context
 import com.artemchep.config.Config
 import com.artemchep.config.editor.common.SharedPrefEditor
 import com.artemchep.config.extensions.asStore
+import com.artemchep.config.util.reduce
 
 /**
  * @author Artem Chepurnoy
  */
-open class SharedPrefConfig(private val sharedPrefName: String) : Config<String>() {
+open class SharedPrefConfig(private val sharedPrefName: String) : Config<String>(
+    reduceKeys = ::reduce
+) {
 
     /**
      * Initializes the config with values loaded

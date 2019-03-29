@@ -5,13 +5,17 @@ import com.artemchep.config.observable.Observable
 import com.artemchep.config.observable.ObservableRegistration
 import com.artemchep.config.store.StoreRead
 import com.artemchep.config.store.StoreWrite
+import com.artemchep.config.store.util.StoreReadMapKey
+import com.artemchep.config.store.util.StoreWriteMapKey
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
  * @author Artem Chepurnoy
  */
-abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
+abstract class Config<K>(
+    val reduceKeys: (K, K) -> K
+) : Observable<Config.OnConfigChangedListener<K>> {
 
     protected val properties: MutableList<ConfigDelegate<*>> = ArrayList()
 
@@ -251,11 +255,23 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
         ConfigDelegate<Record<K>>(key, cur) {
 
         override fun putToStore(storeWrite: StoreWrite<K>, key: K, value: Record<K>) {
-            value.putToStore(storeWrite, key)
+            value.putToStore(
+                StoreWriteMapKey(storeWrite) {
+                    // Merge two of the keys, so user won't
+                    // need to merge then by hand every time.
+                    reduceKeys(key, it)
+                }
+            )
         }
 
         override fun getFromStore(storeRead: StoreRead<K>, key: K, value: Record<K>): Record<K> {
-            return value.apply { getFromStore(storeRead, key) }
+            return value.getFromStore(
+                StoreReadMapKey(storeRead) {
+                    // Merge two of the keys, so user won't
+                    // need to merge then by hand every time.
+                    reduceKeys(key, it)
+                }
+            )
         }
 
     }
@@ -293,9 +309,9 @@ abstract class Config<K> : Observable<Config.OnConfigChangedListener<K>> {
      */
     interface Record<K> {
 
-        fun putToStore(storeWrite: StoreWrite<K>, key: K)
+        fun putToStore(storeWrite: StoreWrite<K>)
 
-        fun getFromStore(storeRead: StoreRead<K>, key: K)
+        fun getFromStore(storeRead: StoreRead<K>): Record<K>
 
     }
 

@@ -1,5 +1,6 @@
 package com.artemchep.config
 
+import com.artemchep.config.util.reduce
 import org.junit.Assert
 import org.junit.Test
 
@@ -12,7 +13,9 @@ class ConfigPropertiesTest {
     fun testAddProperties() {
         val key = "key"
         val value = "value"
-        val config = object : Config<String>() {
+        val config = object : Config<String>(
+            reduceKeys = ::reduce
+        ) {
 
             @Suppress("unused")
             val property by configDelegate(key, value)
