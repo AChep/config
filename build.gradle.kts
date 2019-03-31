@@ -5,7 +5,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("com.android.tools.build:gradle:3.4.0-alpha06")
+        classpath("com.android.tools.build:gradle:3.5.0-alpha09")
         classpath("com.novoda:bintray-release:0.9")
         classpath(kotlin("gradle-plugin", version = KOTLIN_VERSION))
 
