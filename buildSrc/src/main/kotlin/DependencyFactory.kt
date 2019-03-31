@@ -9,7 +9,7 @@ fun createDependencies(module: Module): List<Dependency> {
         "Kotlin Coroutines",
         KOTLIN_COROUTINES_VERSION,
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:$KOTLIN_COROUTINES_VERSION",
-        DependencyType.TEST_IMPLEMENTATION
+        DependencyType.IMPLEMENTATION
     )
     val kotlinMockito = Dependency(
         "Mockito-Kotlin",
