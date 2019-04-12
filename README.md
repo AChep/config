@@ -34,7 +34,7 @@ Then, init it on application create:
 class App : Application() {  
     override fun onCreate() {  
         super.onCreate()  
-        Cfg.init(this)  
+        Cfg.init(this) // loads all variables from shared preferences 
     }  
 }
 ```
@@ -44,6 +44,7 @@ That's all!
 ``` kotlin
 val value = Cfg.intProperty + 1
 ```
+Please note that getting a value will not actually update it from the `SharedPreferences`, it returns last set value. 
 
 #### Write value
 ``` kotlin
