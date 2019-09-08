@@ -9,7 +9,7 @@ plugins {
     kotlin("android.extensions")
 }
 
-val appVersionName = "2.1.0"
+val appVersionName = "2.2.0"
 val appDependencies = createDependencies(Module.LIBRARY)
 
 configure<PublishExtension> {
