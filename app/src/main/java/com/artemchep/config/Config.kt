@@ -148,10 +148,15 @@ abstract class Config<K>(
      * @author Artem Chepurnoy
      */
     abstract inner class ConfigDelegate<T : Any>(
-        internal var key: K,
+        /** Key of the property */
+        val key: K,
         @Volatile
         private var cur: T
     ) : ReadWriteProperty<Any?, T> {
+
+        /** Current value of the property */
+        val value: T
+            get() = cur
 
         /**
          * Sets the value from a store, if exists, otherwise
